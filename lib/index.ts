@@ -1,5 +1,8 @@
 import * as _ from 'lodash';
 
+if(!_.isFunction(beforeEach) || !_.isFunction(afterEach) || !_.isFunction(expect))
+    throw new Error('jasmine globals not found.');
+
 let expectedExpects = null;
 let spy: jasmine.Spy;
 
@@ -22,7 +25,6 @@ function throwError(expected: number, actual: number)
 beforeEach(function()
 {
     expectedExpects = null;
-
     spy = spyOn(global as any, 'expect').and.callThrough();
 });
 
