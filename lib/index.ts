@@ -1,49 +1,33 @@
+import * as jasmine from 'jasmine';
 import * as _ from 'lodash';
 
-function setupExpectedCount(global)
+let expectedExpects = null;
+let spy;
+
+export function expectCount(num: string | number)
 {
-    if(!global.jasmine)
-        throw new Error('jasmine must be loaded');
+    num = _.isString(num) ? parseInt(num, 10) : num;
 
-    let expectedExpects = null;
-    let spy;
+    if(isNaN(num) || num < 0)
+        throw new Error('jasmine.expectCount expects a number >= 0 as the first argument.');
 
-    global.jasmine.expectCount = function(num: string | number)
-    {
-        num = _.isString(num) ? parseInt(num, 10) : num;
-
-        if(isNaN(num) || num < 0)
-            throw new Error('jasmine.expectCount expects a number >= 0 as the first argument.');
-
-        expectedExpects = num;
-    };
-
-    global.beforeEach(function()
-    {
-        expectedExpects = null;
-
-        spy = global.spyOn(global, 'expect').and.callThrough();
-    });
-
-    global.afterEach(function()
-    {
-        throwError(expectedExpects, spy.calls.count());
-    });
+    expectedExpects = num;
 }
 
-function throwError(expectedExpects: number, numExpects: number)
+function throwError(expected: number, actual: number)
 {
-    if(expectedExpects !== null && numExpects !== expectedExpects)
-        throw new Error(`Expected ${expectedExpects} expect${expectedExpects !== 1 ? 's' : ''} to be called, ${numExpects} expect${numExpects !== 1 ? 's were' : ' was'} actually called.`);
+    if(expected !== null && actual !== expected)
+        throw new Error(`Expected ${expected} expect${expected !== 1 ? 's' : ''} to be called, ${actual} expect${actual !== 1 ? 's were' : ' was'} actually called.`);
 }
 
-// tslint:disable-next-line:prefer-const
-let self: any;
-// tslint:disable-next-line:prefer-const
-let window: any;
-
-export function initExpectCount()
+jasmine.beforeEach(function()
 {
-    const globalObj = typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {};
-    setupExpectedCount(globalObj);
-}
+    expectedExpects = null;
+
+    spy = jasmine.spyOn(global, 'expect').and.callThrough();
+});
+
+jasmine.afterEach(function()
+{
+    throwError(expectedExpects, spy.calls.count());
+});
