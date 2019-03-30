@@ -1,8 +1,7 @@
-import * as jasmine from 'jasmine';
 import * as _ from 'lodash';
 
 let expectedExpects = null;
-let spy;
+let spy: jasmine.Spy;
 
 export function expectCount(num: string | number)
 {
@@ -20,14 +19,14 @@ function throwError(expected: number, actual: number)
         throw new Error(`Expected ${expected} expect${expected !== 1 ? 's' : ''} to be called, ${actual} expect${actual !== 1 ? 's were' : ' was'} actually called.`);
 }
 
-jasmine.beforeEach(function()
+beforeEach(function()
 {
     expectedExpects = null;
 
-    spy = jasmine.spyOn(global, 'expect').and.callThrough();
+    spy = spyOn(global as any, 'expect').and.callThrough();
 });
 
-jasmine.afterEach(function()
+afterEach(function()
 {
     throwError(expectedExpects, spy.calls.count());
 });
