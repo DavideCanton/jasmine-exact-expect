@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 function setupExpectedCount(global)
 {
     if(!global.jasmine)
-        throw new Error('jasmine must be loaded before jasmine2-focused');
+        throw new Error('jasmine must be loaded');
 
     let expectedExpects = null;
     let spy;
