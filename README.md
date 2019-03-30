@@ -1,7 +1,5 @@
-# at-json   
+# jasmine-exact-expect
 
-[![Build Status](https://travis-ci.org/DavideCanton/at-json.svg?branch=master)](https://travis-ci.org/DavideCanton/at-json)
-
-A declarative mapper to and from JSON.
+Jasmine expect count assertion.
 
 Docs incoming.
