@@ -5,7 +5,6 @@ function setupExpectedCount(global)
     if(!global.jasmine)
         throw new Error('jasmine must be loaded before jasmine2-focused');
 
-    let numExpects = 0;
     let expectedExpects = null;
     let spy;
 
@@ -21,7 +20,6 @@ function setupExpectedCount(global)
 
     global.beforeEach(function()
     {
-        numExpects = 0;
         expectedExpects = null;
 
         spy = global.spyOn(global, 'expect').and.callThrough();
