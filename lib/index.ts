@@ -1,10 +1,21 @@
 import * as _ from 'lodash';
 
+declare let self: any;
+declare let window: any;
+
+function getGlobal()
+{
+    return (function(global: any)
+    {
+        return global;
+    }).call(this, typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {});
+}
+
 (function(globalObj)
 {
     if(!_.isFunction(globalObj.beforeEach) || !_.isFunction(globalObj.afterEach) || !_.isFunction(globalObj.expect) || !_.isFunction(globalObj.expectAsync))
         throw new Error('jasmine globals not found.');
-})(this);
+})(getGlobal());
 
 let expectedExpects: number | null = null;
 let expectedAsyncExpects: number | null = null;
@@ -52,4 +63,4 @@ function throwError(expected: number | null, actual: number)
         throwError(expectedExpects, expectSpy.calls.count());
         throwError(expectedAsyncExpects, expectAsyncSpy.calls.count());
     });
-})(this);
+})(getGlobal());
